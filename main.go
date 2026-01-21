@@ -1,6 +1,3 @@
-# Go concurrency by Melkey
-
-```go
 package main
 
 import (
@@ -70,4 +67,3 @@ func fetchWeather(city string, ch chan<- string, wg *sync.WaitGroup) {
 	ch <- fmt.Sprintf("City: %s, Temp: %.2f°C", data.Name, data.Main.Temp)
 
 }
-```
