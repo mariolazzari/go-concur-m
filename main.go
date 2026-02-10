@@ -12,6 +12,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type WeatherData struct {
+	Name string `json:"name"`
+	Main struct {
+		Temp float64 `json:"temp"`
+	} `json:"main"`
+}
+
 func main() {
 	start := time.Now()
 	godotenv.Load()
@@ -39,19 +46,12 @@ func main() {
 
 }
 
-type WeatherData struct {
-	Name string `json:"name"`
-	Main struct {
-		Temp float64 `json:"temp"`
-	} `json:"main"`
-}
-
 func fetchWeather(city string, ch chan<- string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	var data WeatherData
 	API_KEY := os.Getenv("OPEN_WEATHER_API_KEY")
-	url := "http://api.openweathermap.org/data/2.5/weather?q=" + url.QueryEscape(city) + "&appid=" + API_KEY + "&units=metric"
+	url := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric", url.QueryEscape(city), API_KEY)
 	resp, err := http.Get(url)
 	if err != nil {
 		ch <- fmt.Sprintf("Error decoding data %s: %s\n", city, err)
